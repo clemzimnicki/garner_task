@@ -413,18 +413,20 @@
     function hueCat2Label() { return hue_task_pair === 'BB' ? 'Brown'  : 'Green';  }
     function lightPairLabel() { return light_task_pair === 'BB' ? 'blue/brown' : 'purple/green'; }
 
-    // build the timeline_variables for one block (each color repeated evenly to fill the block)
-    function makeGarnerVars(colors, blockType, blockNum) {
+ // build the timeline_variables for one block
+ function makeGarnerVars(colors, blockType, blockNum, taskType) {
         var perColor = Math.floor(GARNER_TRIALS_PER_BLOCK / colors.length);
         var vars = [];
         colors.forEach(function (c) {
             for (var k = 0; k < perColor; k++) {
+                var correctKey = (taskType === 'hue') ? hueCorrectKey(c) : lightnessCorrectKey(c);
                 vars.push({
                     stim: c,
-                    hue: garnerHue(c),
-                    correct_response: garnerCorrectKey(c),
+                    category: (taskType === 'hue') ? garnerHueCategory(c, hue_task_pair) : garnerLightness(c),
+                    correct_response: correctKey,
                     block_type: blockType,
-                    block_num: blockNum
+                    block_num: blockNum,
+                    task_type: taskType
                 });
             }
         });

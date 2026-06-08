@@ -329,6 +329,24 @@
        48 trials per block.
     ---------------------------------------------------------------------------------- */
 
+     /* define testing instructions */
+     var instr_garner = {
+      type: jsPsychHtmlButtonResponse, 
+      stimulus: "<p>In the first part of the experiment, you will sort two sets of colors.<br>" +
+        "On each trial, you will see one color. Categorize it using the <strong>left</strong> or <strong>right</strong> arrow keys.<br>"+
+        "Please sort colors as fast as you can do so, while being careful and not making mistakes.<br>"+
+        "<p>There will first be a short practice round.<p>" +
+        "<p>Click 'Continue' begin the first section of color sorting.</p>",
+        choices: ["Continue"],
+        post_trial_gap: 2000,
+        on_finish: function(){
+            shuffle(validation_concat);
+
+        }
+    };
+   timeline.push(instr_garner);
+
+
     // --- the eight garner colors ---
     var G_DARK_BLUE   = "img_garner/1C3D61.png";
     var G_DARK_BROWN  = "img_garner/632B14.png";
@@ -616,8 +634,7 @@
             choices: ["Continue"],
             post_trial_gap: 500,
             stimulus:
-                "<p style='color:white;'>In this part of the experiment you will sort colors by their <strong>hue</strong>.</p>" +
-                "<p style='color:white;'>On each trial a single color will appear. Press the " +
+                "<p>On each trial, a single color will appear. Press the " +
                 "<strong>left</strong> or <strong>right</strong> arrow key to place it in the correct category (" +
                 cat1Label + " or " + cat2Label + "). " +
                 "The colors that go on each side are shown before every round, and you will receive " +
@@ -636,7 +653,7 @@
             choices: ["Continue"],
             post_trial_gap: 500,
             stimulus:
-                "<p style='color:white;'>In this part of the experiment you will sort colors by their <strong>lightness</strong>.</p>" +
+                "<p style='color:white;'>In this section, you will sort the colors shown below." +
                 "<p style='color:white;'>On each trial a single color will appear. Press the " +
                 "<strong>left</strong> or <strong>right</strong> arrow key to place it in the correct category " +
                 "(dark or light). The colors will be shades of " + pairLabel + ". " +
@@ -688,8 +705,9 @@
     /* define testing instructions */
     var instructions = {
       type: jsPsychHtmlButtonResponse, // CHANGE THIS (instructions)
-      stimulus: "<p>In each trial of this task, you will see three images: one target item on top, and two choices beneath the target item." +
-        "</p><p>For each trial, <strong>please select the item that is most like the target item.</strong><br>"+
+      stimulus: "<p>In the next part of the experiment, you will judge color similarity. On each trial, you will see three images:<br>" +
+        "one target item on top, and two choices beneath the target item. For each trial,<br>"+
+        "<strong>please select the item that is most like the target item.</strong><br>"+
         "If you think the color on the <strong>left</strong> is most similar to the color on top, please press the left arrow key.<br>" +
         "If you think the color on the <strong>right</strong> is most similar to the color on top, please press the right arrow key.<br>" +
         "<p>There may be trials with no obvious answer. In those cases, use your best judgment." +

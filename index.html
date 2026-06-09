@@ -74,21 +74,20 @@
    */ 
     // generating a user id and file name for SONA
     var secret_code = jsPsych.data.urlVariables().id;
-    var filename = "color_" + secret_code + "_part1.csv"; // CHANGE THIS (file name)
+    var filename = "garner_" + secret_code + ".csv"; // CHANGE THIS (file name)
 
     //const subject_id = jsPsych.randomization.randomID(10);
     //const filename = `${subject_id}.csv`;
 
     // this is to save to OSF using DataPipe
     //if want to save data more often, copy this and change the name, and save halfway through
-      const save_data = { 
+        const save_data = {
         type: jsPsychPipe,
         action: "save",
-        experiment_id: "fL1GbwczvGKV", // SONA = "W31dcwJTrTgj", //change this for different experiments in datapipe
+        experiment_id: "e1gAJWvZcifM",
         filename: filename,
         data_string: ()=>jsPsych.data.get().csv()
-      };
-
+        };
           /* create timeline */
     var timeline = [];
       

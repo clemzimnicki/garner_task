@@ -328,23 +328,7 @@
        48 trials per block.
     ---------------------------------------------------------------------------------- */
 
-     /* define testing instructions */
-     var instr_garner = {
-      type: jsPsychHtmlButtonResponse, 
-      stimulus: "<p>In the first part of the experiment, you will sort two sets of colors.<br>" +
-        "On each trial, you will see one color. Categorize it using the <strong>left</strong> or <strong>right</strong> arrow keys.<br>"+
-        "Try to respond as quickly as you can without making mistakes. There are several rounds, with short breaks in between.<br>"+
-        "<p>There will first be a short practice round.<br>" +
-        "Click 'Continue' to begin.</p>",
-        choices: ["Continue"],
-        post_trial_gap: 2000,
-        on_finish: function(){
-            shuffle(validation_concat);
-
-        }
-    };
-   timeline.push(instr_garner);
-
+    
 
     // --- the eight garner colors ---
     var G_DARK_BLUE   = "img_garner/1C3D61.png";
@@ -507,6 +491,25 @@
     function garnerImg(c) {
         return '<img src="' + c + '" style="width:90px; height:90px; margin:6px; border:1px solid #000;">';
     }
+
+
+    /* define testing instructions
+     var instr_garner = {
+      type: jsPsychHtmlButtonResponse, 
+      stimulus: "<p>In the first part of the experiment, you will sort two sets of colors.<br>" +
+        "On each trial, you will see one color. Categorize it using the <strong>left</strong> or <strong>right</strong> arrow keys.<br>"+
+        "Try to respond as quickly as you can without making mistakes. There are several rounds, with short breaks in between.<br>"+
+        "<p>There will first be a short practice round.<br>" +
+        "Click 'Continue' to begin.</p>",
+        choices: ["Continue"],
+        post_trial_gap: 2000,
+        on_finish: function(){
+            shuffle(validation_concat);
+
+        }
+    };
+   timeline.push(instr_garner);
+*/
 
 
     // Instructions for HUE task blocks

@@ -521,9 +521,6 @@
             post_trial_gap: 500,
             stimulus:
                 "<p><strong>Round " + blockNum + "</strong></p>" +
-                "<p>You will see one color at a time. Categorize each color by its <strong>hue</strong> " +
-                "as quickly and as accurately as you can using the <strong>left</strong> and " +
-                "<strong>right</strong> arrow keys.</p>" +
                 "<div style='display:flex; justify-content:center; gap:120px; margin:30px 0; color:white;'>" +
                     "<div><div style='font-size:48px;'>&larr;</div>" +
                     "<div style='margin-bottom:6px;'>Left arrow key</div>" + leftHTML + "</div>" +
@@ -624,7 +621,7 @@
             { colors: block_5,      type: 'filtering' }
         ];
     }
-/*
+
     // --- Build intro screen for hue task ---
     function makeHueTaskIntro(pair) {
         var cat1Label = (pair === 'BB') ? 'blue' : 'purple';
@@ -654,9 +651,7 @@
             post_trial_gap: 500,
             stimulus:
                 "<p style='color:white;'>In this section, you will sort the colors shown below." +
-                "<p style='color:white;'>On each trial a single color will appear. Press the " +
-                "<strong>left</strong> or <strong>right</strong> arrow key to place it in the correct category " +
-                "(dark or light). The colors will be shades of " + pairLabel + ". " +
+                "The colors will be shades of " + pairLabel + ". " +
                 "The colors that go on each side are shown before every round, and you will receive " +
                 "feedback after each response.</p>" +
                 "<p style='color:white;'>Try to respond as quickly as you can without making mistakes. " +
@@ -664,7 +659,7 @@
                 "<p style='color:white;'>Click 'Continue' to begin.</p>"
         };
     }
-*/
+
     // --- Assemble both tasks ---
     var hue_block_defs       = buildHueTask(hue_task_pair);
     var lightness_block_defs = buildLightnessTask(light_task_pair);

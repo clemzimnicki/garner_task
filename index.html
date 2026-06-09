@@ -333,9 +333,9 @@
       type: jsPsychHtmlButtonResponse, 
       stimulus: "<p>In the first part of the experiment, you will sort two sets of colors.<br>" +
         "On each trial, you will see one color. Categorize it using the <strong>left</strong> or <strong>right</strong> arrow keys.<br>"+
-        "Please sort colors as fast as you can do so, while being careful and not making mistakes.<br>"+
-        "<p>There will first be a short practice round.<p>" +
-        "<p>Click 'Continue' begin the first section of color sorting.</p>",
+        "Try to respond as quickly as you can without making mistakes. There are several rounds, with short breaks in between.<br>"+
+        "<p>There will first be a short practice round.<br>" +
+        "Click 'Continue' to begin.</p>",
         choices: ["Continue"],
         post_trial_gap: 2000,
         on_finish: function(){
@@ -451,12 +451,13 @@
     }
 
     // --- single garner classification trial ---
-    var garner_fixation = {
-        type: jsPsychHtmlKeyboardResponse,
-        stimulus: '<p style="font-size:48px; color:white;">+</p>',
-        choices: "NO_KEYS",
-        trial_duration: 500
-    };
+    var fixation = {
+          type: jsPsychHtmlKeyboardResponse,
+            stimulus: '+',
+            choices: "NO_KEYS",
+            trial_duration: 500
+        };
+      
 
     var garner_trial = {
         type: jsPsychImageKeyboardResponse,
@@ -496,7 +497,7 @@
     // one trial = fixation -> color -> feedback
     function makeGarnerBlock(colors, blockType, blockNum, taskType) {
         return {
-            timeline: [garner_fixation, garner_trial, garner_feedback],
+            timeline: [fixation, garner_trial, garner_feedback],
             timeline_variables: makeGarnerVars(colors, blockType, blockNum, taskType),
             randomize_order: true
         };
@@ -519,8 +520,8 @@
             choices: ["Continue"],
             post_trial_gap: 500,
             stimulus:
-                "<p style='color:white;'><strong>Round " + blockNum + "</strong></p>" +
-                "<p style='color:white;'>You will see one color at a time. Categorize each color by its <strong>hue</strong> " +
+                "<p><strong>Round " + blockNum + "</strong></p>" +
+                "<p>You will see one color at a time. Categorize each color by its <strong>hue</strong> " +
                 "as quickly and as accurately as you can using the <strong>left</strong> and " +
                 "<strong>right</strong> arrow keys.</p>" +
                 "<div style='display:flex; justify-content:center; gap:120px; margin:30px 0; color:white;'>" +
@@ -529,7 +530,7 @@
                     "<div><div style='font-size:48px;'>&rarr;</div>" +
                     "<div style='margin-bottom:6px;'>Right arrow key</div>" + rightHTML + "</div>" +
                 "</div>" +
-                "<p style='color:white;'>You will get feedback after each response. " +
+                "<p>You will get feedback after each response. " +
                 "Click 'Continue' to begin.</p>"
         };
     }
@@ -623,7 +624,7 @@
             { colors: block_5,      type: 'filtering' }
         ];
     }
-
+/*
     // --- Build intro screen for hue task ---
     function makeHueTaskIntro(pair) {
         var cat1Label = (pair === 'BB') ? 'blue' : 'purple';
@@ -663,7 +664,7 @@
                 "<p style='color:white;'>Click 'Continue' to begin.</p>"
         };
     }
-
+*/
     // --- Assemble both tasks ---
     var hue_block_defs       = buildHueTask(hue_task_pair);
     var lightness_block_defs = buildLightnessTask(light_task_pair);
@@ -722,12 +723,6 @@
    timeline.push(instructions);
       
       
-      var fixation = {
-          type: jsPsychHtmlKeyboardResponse,
-            stimulus: '+',
-            choices: "NO_KEYS",
-            trial_duration: 500
-        };
       timeline.push(fixation);
       
       var arr_pair = [];

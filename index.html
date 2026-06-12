@@ -546,17 +546,17 @@
             choices: ["Continue"],
             post_trial_gap: 500,
             stimulus:
-                "<p style='color:white;'><strong>Round " + blockNum + "</strong></p>" +
-                "<p style='color:white;'>You will see one color at a time. Categorize each color by its <strong>lightness</strong> " +
-                "as quickly and as accurately as you can using the <strong>left</strong> and " +
-                "<strong>right</strong> arrow keys.</p>" +
+                "<p><strong>Round " + blockNum + "</strong></p>" +
+                "<p>Sort the colors as quickly and accurately as you can.<br>" +
+                "When you see the color on the <strong>left</strong>, press the <strong>left</strong> arrow key.<br>" +
+                "When you see the color on the <strong>left</strong>, press the <strong>left</strong> arrow key.<br>" +
                 "<div style='display:flex; justify-content:center; gap:120px; margin:30px 0; color:white;'>" +
                     "<div><div style='font-size:48px;'>&larr;</div>" +
                     "<div style='margin-bottom:6px;'>Left arrow key</div>" + leftHTML + "</div>" +
                     "<div><div style='font-size:48px;'>&rarr;</div>" +
                     "<div style='margin-bottom:6px;'>Right arrow key</div>" + rightHTML + "</div>" +
                 "</div>" +
-                "<p style='color:white;'>You will get feedback after each response. " +
+                "<p>You will get feedback after each response. " +
                 "Click 'Continue' to begin.</p>"
         };
     }
@@ -634,14 +634,13 @@
             choices: ["Continue"],
             post_trial_gap: 500,
             stimulus:
-                "<p>On each trial, a single color will appear. Press the " +
-                "<strong>left</strong> or <strong>right</strong> arrow key to place it in the correct category (" +
-                cat1Label + " or " + cat2Label + "). " +
-                "The colors that go on each side are shown before every round, and you will receive " +
-                "feedback after each response.</p>" +
-                "<p style='color:white;'>Try to respond as quickly as you can without making mistakes. " +
+                "<p>In the first part of the experiment, you will sort two sets of colors.<br>" +
+                "You will be shown colors and the correct categories to sort them into. Then, on each trial,<br>" +
+                "you will see one color at a time. Press the <strong>left</strong> or <strong>right</strong> arrow keys to " +
+                "place it in the correct category.</p>" +
+                "<p>Try to respond as quickly as you can without making mistakes." +
                 "There are several rounds, with short breaks in between.</p>" +
-                "<p style='color:white;'>Click 'Continue' to begin.</p>"
+                "<p>Click 'Continue' to begin.</p>"
         };
     }
 
@@ -653,13 +652,13 @@
             choices: ["Continue"],
             post_trial_gap: 500,
             stimulus:
-                "<p style='color:white;'>In this section, you will sort the colors shown below." +
-                "The colors will be shades of " + pairLabel + ". " +
-                "The colors that go on each side are shown before every round, and you will receive " +
-                "feedback after each response.</p>" +
-                "<p style='color:white;'>Try to respond as quickly as you can without making mistakes. " +
+            "<p>In the first part of the experiment, you will sort two sets of colors.<br>" +
+                "You will be shown colors and the correct categories to sort them into. Then, on each trial,<br>" +
+                "you will see one color at a time. Press the <strong>left</strong> or <strong>right</strong> arrow keys to " +
+                "place it in the correct category.</p>" +
+                "<p>Try to respond as quickly as you can without making mistakes." +
                 "There are several rounds, with short breaks in between.</p>" +
-                "<p style='color:white;'>Click 'Continue' to begin.</p>"
+                "<p>Click 'Continue' to begin.</p>"
         };
     }
 

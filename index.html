@@ -368,13 +368,13 @@
     // --- Randomize category->side mapping per participant, per task ---
     // HUE task: for BB pair, blue vs brown; for PG pair, purple vs green
     var hue_cat1_side = Math.random() < 0.5 ? 'left' : 'right';
-    var hue_cat1_key  = (hue_cat1_side === 'left') ? 'ArrowLeft' : 'ArrowRight';
-    var hue_cat2_key  = (hue_cat1_side === 'left') ? 'ArrowRight' : 'ArrowLeft';
+    var hue_cat1_key  = (hue_cat1_side === 'left') ? 'arrowleft' : 'arrowright';
+    var hue_cat2_key  = (hue_cat1_side === 'left') ? 'arrowright' : 'arrowleft';
 
     // LIGHTNESS task: dark vs light
     var dark_side = Math.random() < 0.5 ? 'left' : 'right';
-    var dark_key  = (dark_side === 'left') ? 'ArrowLeft' : 'ArrowRight';
-    var light_key = (dark_side === 'left') ? 'ArrowRight' : 'ArrowLeft';
+    var dark_key  = (dark_side === 'left') ? 'arrowleft' : 'arrowright';
+    var light_key = (dark_side === 'left') ? 'arrowright' : 'arrowleft';
 
     jsPsych.data.addProperties({
         garner_hue_task_pair:   hue_task_pair,
@@ -447,7 +447,7 @@
         type: jsPsychImageKeyboardResponse,
         stimulus: jsPsych.timelineVariable('stim'),
         stimulus_height: 200,
-        choices: ['ArrowLeft', 'ArrowRight'],
+        choices: ['arrowleft', 'arrowright'],
         data: {
             task: 'garner',
             block_type: jsPsych.timelineVariable('block_type'),
@@ -460,7 +460,7 @@
             data.correct = (data.response === data.correct_response);
         }
     };
-
+/*
     // --- feedback shown right after each trial ---
     var garner_feedback = {
         type: jsPsychHtmlKeyboardResponse,
@@ -477,11 +477,11 @@
                 : '<p style="font-size:44px; color:#e74c3c;">Incorrect</p>';
         }
     };
-
+*/
     // one trial = fixation -> color -> feedback
     function makeGarnerBlock(colors, blockType, blockNum, taskType) {
         return {
-            timeline: [fixation, garner_trial, garner_feedback],
+            timeline: [fixation, garner_trial], //garner_feedback
             timeline_variables: makeGarnerVars(colors, blockType, blockNum, taskType),
             randomize_order: true
         };
@@ -493,52 +493,29 @@
     }
 
 
-    /* define testing instructions
+    // define testing instructions
      var instr_garner = {
       type: jsPsychHtmlButtonResponse, 
       stimulus: "<p>In the first part of the experiment, you will sort two sets of colors.<br>" +
-        "On each trial, you will see one color. Categorize it using the <strong>left</strong> or <strong>right</strong> arrow keys.<br>"+
-        "Try to respond as quickly as you can without making mistakes. There are several rounds, with short breaks in between.<br>"+
-        "<p>There will first be a short practice round.<br>" +
-        "Click 'Continue' to begin.</p>",
+        "You will be shown colors and the correct categories to sort them into. Then, on each trial,<br>" +
+        "you will see one color at a time. Press the <strong>left</strong> or <strong>right</strong> arrow keys to " +
+        "place it in the correct category.</p>" +
+        "<p>Try to respond as quickly as you can without making mistakes." +
+        "There are several rounds, with short breaks in between.</p>" +
+        "<p>Click 'Continue' to begin.</p>",
         choices: ["Continue"],
         post_trial_gap: 2000,
-        on_finish: function(){
-            shuffle(validation_concat);
-
-        }
     };
-   timeline.push(instr_garner);
-*/
+
 
 
     // Instructions for HUE task blocks
     function makeHueInstructions(colors, blockNum) {
-        var leftColors  = colors.filter(function (c) { return hueCorrectKey(c) === 'ArrowLeft'; });
-        var rightColors = colors.filter(function (c) { return hueCorrectKey(c) === 'ArrowRight'; });
-        var leftHTML  = leftColors.map(garnerImg).join('');
-        var rightHTML = rightColors.map(garnerImg).join('');
-        return {
-            type: jsPsychHtmlButtonResponse,
-            choices: ["Continue"],
-            post_trial_gap: 500,
-            stimulus:
-                "<p><strong>Round " + blockNum + "</strong></p>" +
-                "<div style='display:flex; justify-content:center; gap:120px; margin:30px 0; color:white;'>" +
-                    "<div><div style='font-size:48px;'>&larr;</div>" +
-                    "<div style='margin-bottom:6px;'>Left arrow key</div>" + leftHTML + "</div>" +
-                    "<div><div style='font-size:48px;'>&rarr;</div>" +
-                    "<div style='margin-bottom:6px;'>Right arrow key</div>" + rightHTML + "</div>" +
-                "</div>" +
-                "<p>You will get feedback after each response. " +
-                "Click 'Continue' to begin.</p>"
-        };
-    }
-
-        // Instructions for LIGHTNESS task blocks
-        function makeLightnessInstructions(colors, blockNum) {
-        var leftColors  = colors.filter(function (c) { return lightnessCorrectKey(c) === 'ArrowLeft'; });
-        var rightColors = colors.filter(function (c) { return lightnessCorrectKey(c) === 'ArrowRight'; });
+        var allColors = (hue_task_pair === 'BB')
+            ? garner_blue.concat(garner_brown)
+            : garner_purple.concat(garner_green);
+        var leftColors  = allColors.filter(function (c) { return hueCorrectKey(c) === 'arrowleft'; });
+        var rightColors = allColors.filter(function (c) { return hueCorrectKey(c) === 'arrowright'; });
         var leftHTML  = leftColors.map(garnerImg).join('');
         var rightHTML = rightColors.map(garnerImg).join('');
         return {
@@ -548,15 +525,44 @@
             stimulus:
                 "<p><strong>Round " + blockNum + "</strong></p>" +
                 "<p>Sort the colors as quickly and accurately as you can.<br>" +
-                "When you see the color on the <strong>left</strong>, press the <strong>left</strong> arrow key.<br>" +
-                "When you see the color on the <strong>left</strong>, press the <strong>left</strong> arrow key.<br>" +
+                "When you see the colors on the <strong>left</strong>, press the <strong>left</strong> arrow key.<br>" +
+                "When you see the colors on the <strong>right</strong>, press the <strong>right</strong> arrow key.<br>" +
                 "<div style='display:flex; justify-content:center; gap:120px; margin:30px 0; color:white;'>" +
                     "<div><div style='font-size:48px;'>&larr;</div>" +
                     "<div style='margin-bottom:6px;'>Left arrow key</div>" + leftHTML + "</div>" +
                     "<div><div style='font-size:48px;'>&rarr;</div>" +
                     "<div style='margin-bottom:6px;'>Right arrow key</div>" + rightHTML + "</div>" +
                 "</div>" +
-                "<p>You will get feedback after each response. " +
+                //"<p>You will get feedback after each response. " +
+                "Click 'Continue' to begin.</p>"
+        };
+    }
+
+        // Instructions for LIGHTNESS task blocks
+        function makeLightnessInstructions(colors, blockNum) {
+            var allColors = (light_task_pair === 'BB')
+            ? garner_blue.concat(garner_brown)
+            : garner_purple.concat(garner_green);
+        var leftColors  = allColors.filter(function (c) { return lightnessCorrectKey(c) === 'arrowleft'; });
+        var rightColors = allColors.filter(function (c) { return lightnessCorrectKey(c) === 'arrowright'; });
+        var leftHTML  = leftColors.map(garnerImg).join('');
+        var rightHTML = rightColors.map(garnerImg).join('');
+        return {
+            type: jsPsychHtmlButtonResponse,
+            choices: ["Continue"],
+            post_trial_gap: 500,
+            stimulus:
+                "<p><strong>Round " + blockNum + "</strong></p>" +
+                "<p>Sort the colors as quickly and accurately as you can.<br>" +
+                "When you see the colors on the <strong>left</strong>, press the <strong>left</strong> arrow key.<br>" +
+                "When you see the colors on the <strong>right</strong>, press the <strong>right</strong> arrow key.<br>" +
+                "<div style='display:flex; justify-content:center; gap:120px; margin:30px 0; color:white;'>" +
+                    "<div><div style='font-size:48px;'>&larr;</div>" +
+                    "<div style='margin-bottom:6px;'>Left arrow key</div>" + leftHTML + "</div>" +
+                    "<div><div style='font-size:48px;'>&rarr;</div>" +
+                    "<div style='margin-bottom:6px;'>Right arrow key</div>" + rightHTML + "</div>" +
+                "</div>" +
+                //"<p>You will get feedback after each response. " +
                 "Click 'Continue' to begin.</p>"
         };
     }
@@ -624,7 +630,7 @@
             { colors: block_5,      type: 'filtering' }
         ];
     }
-
+/*
     // --- Build intro screen for hue task ---
     function makeHueTaskIntro(pair) {
         var cat1Label = (pair === 'BB') ? 'blue' : 'purple';
@@ -661,7 +667,9 @@
                 "<p>Click 'Continue' to begin.</p>"
         };
     }
+*/
 
+    timeline.push(instr_garner)
     // --- Assemble both tasks ---
     var hue_block_defs       = buildHueTask(hue_task_pair);
     var lightness_block_defs = buildLightnessTask(light_task_pair);
@@ -669,26 +677,26 @@
     // --- Push task 1 to timeline ---
     if (garner_condition === 'A') {
         // Task 1: HUE (blue/brown), Task 2: LIGHTNESS (purple/green)
-        timeline.push(makeHueTaskIntro(hue_task_pair));
+        //timeline.push(makeHueTaskIntro(hue_task_pair));
         hue_block_defs.forEach(function (def, i) {
             timeline.push(makeHueInstructions(def.colors, i + 1));
             timeline.push(makeGarnerBlock(def.colors, def.type, i + 1, 'hue'));
         });
 
-        timeline.push(makeLightnessTaskIntro(light_task_pair));
+        //timeline.push(makeLightnessTaskIntro(light_task_pair));
         lightness_block_defs.forEach(function (def, i) {
             timeline.push(makeLightnessInstructions(def.colors, i + 1));
             timeline.push(makeGarnerBlock(def.colors, def.type, i + 1, 'lightness'));
         });
     } else {
         // Task 1: LIGHTNESS (blue/brown), Task 2: HUE (purple/green)
-        timeline.push(makeLightnessTaskIntro(light_task_pair));
+        //timeline.push(makeLightnessTaskIntro(light_task_pair));
         lightness_block_defs.forEach(function (def, i) {
             timeline.push(makeLightnessInstructions(def.colors, i + 1));
             timeline.push(makeGarnerBlock(def.colors, def.type, i + 1, 'lightness'));
         });
 
-        timeline.push(makeHueTaskIntro(hue_task_pair));
+        //timeline.push(makeHueTaskIntro(hue_task_pair));
         hue_block_defs.forEach(function (def, i) {
             timeline.push(makeHueInstructions(def.colors, i + 1));
             timeline.push(makeGarnerBlock(def.colors, def.type, i + 1, 'hue'));
@@ -759,7 +767,7 @@
     var trial = {
         type: jsPsychImageKeyboardResponse,
         stimulus: jsPsych.timelineVariable('item'),
-        choices: ['ArrowLeft', 'ArrowRight'],
+        choices: ['arrowleft', 'arrowright'],
         on_start: function (trial) {
             shuffle(stimuli_arr);
             arr_pair = getRandomItems(stimuli_arr);
@@ -798,14 +806,14 @@
             //shuffle(texture_arr);
             //data.choices = arr_pair;
             // Determine which image was selected based on key press
-            if (data.response == 'ArrowLeft') {
-                console.log("ArrowLeft selected.");
+            if (data.response == 'arrowleft') {
+                console.log("arrowleft selected.");
                 data.selected_image = arr_pair[0];
-                data.selected_index = 0;  // ArrowLeft corresponds to the first choice
-            } else if (data.response == 'ArrowRight') {
-                console.log("ArrowRight selected.");
+                data.selected_index = 0;  // arrowleft corresponds to the first choice
+            } else if (data.response == 'arrowright') {
+                console.log("arrowright selected.");
                 data.selected_image = arr_pair[1];
-                data.selected_index = 1;  // ArrowLeft corresponds to the first choice
+                data.selected_index = 1;  // arrowleft corresponds to the first choice
             }
 
             // Get the previous trial's data and compute the average response time
@@ -857,7 +865,7 @@
             head = row.head;
             return head;
         },
-        choices: ['ArrowLeft', 'ArrowRight'],  // Use arrow keys for choices
+        choices: ['arrowleft', 'arrowright'],  // Use arrow keys for choices
 
         on_start: function (trial) {
             arr_pair = [row.choice_1, row.choice_2];  // Get the two choices
@@ -879,14 +887,14 @@
                 return;
             }
             // Determine which image was selected based on the key press
-            if (data.response == 'ArrowLeft') {
-                console.log("ArrowLeft selected.");
+            if (data.response == 'arrowleft') {
+                console.log("arrowleft selected.");
                 data.selected_image = arr_pair[0];
-                data.selected_index = 0;  // ArrowLeft corresponds to the first choice
-            } else if (data.response == 'ArrowRight') {
-                console.log("ArrowRight selected.");
+                data.selected_index = 0;  // arrowleft corresponds to the first choice
+            } else if (data.response == 'arrowright') {
+                console.log("arrowright selected.");
                 data.selected_image = arr_pair[1];
-                data.selected_index = 1;  // ArrowLeft corresponds to the first choice
+                data.selected_index = 1;  // arrowleft corresponds to the first choice
             }
 
             // Save the choices to the data
@@ -908,7 +916,7 @@
     var check_trial = {
         type: jsPsychImageKeyboardResponse,
         stimulus: jsPsych.timelineVariable('head'),  // Display the head image
-        choices: ['ArrowLeft', 'ArrowRight'],  // Use arrow keys for choices
+        choices: ['arrowleft', 'arrowright'],  // Use arrow keys for choices
 
         on_start: function (trial) {
             arr_pair = [
@@ -938,13 +946,13 @@
 
             // Determine which image was selected based on the key press
             if (response === 'arrowleft') {
-                console.log("ArrowLeft selected.");
+                console.log("arrowleft selected.");
                 data.selected_image = arr_pair[0];
-                data.selected_index = 0;  // ArrowLeft corresponds to the first choice
+                data.selected_index = 0;  // arrowleft corresponds to the first choice
             } else if (response === 'arrowright') {
-                console.log("ArrowRight selected.");
+                console.log("arrowright selected.");
                 data.selected_image = arr_pair[1];
-                data.selected_index = 1;  // ArrowRight corresponds to the second choice
+                data.selected_index = 1;  // arrowright corresponds to the second choice
             }
 
             // Log the values for debugging
@@ -1254,14 +1262,42 @@ var demographics = {
     };
     timeline.push(id_age);
 
-    var monitor_settings = {
-      type: jsPsychSurveyText,     // CHANGE THIS (written survey questions)
-      questions: [{prompt: "Please enter the make and model of your computer:", rows: 1, columns: 30, name: "monitor", required: true}, 
-                  {prompt: "If you have an external monitor that is different from the make/model of your computer, please enter the monitor model here. Otherwise, enter N/A.", rows: 1, columns: 30, name: "monitor2"},
-                  {prompt: "Please enter the color profile of your computer. On Mac, this can be found under Settings > Displays.", rows : 1, columns: 30, name: "color_profile"}
-                 ]
+    var color_experience = {
+    type: jsPsychSurveyHtmlForm,
+    preamble: "<p>We would like to know whether you have experience working with colors or learning about them.<br>" +
+        "By experience, we mean taking classes where you have learned about color (like art, design, or Perception &amp; Sensation).<br> " +
+        "These classes can have been taken in high school, college, or through art clubs.<br> " +
+        "Experience can also mean being an artist, designer, photographer, or working in a color-related field,<br> " +
+        "even if you have not taken formal classes.</p>",
+    html:
+        "<h3 style='margin-top:1em;'>Classes and Experience</h3>" +
+
+        "<p><label>List all the art classes you have taken. If none, type N/A:<br>" +
+        "<input type='text' name='art_classes' size='60' required></label></p>" +
+
+        "<p><label>List all other classes you have taken where you learned about color. If none, type N/A:<br>" +
+        "<input type='text' name='all_classes' size='60' required></label></p>" +
+
+        "<p><label>List any hobbyist or professional experience with color. If none, type N/A:<br>" +
+        "<input type='text' name='hobbies_work' size='60' required></label></p>" +
+
+        "<p><label>Any other relevant experience? If none, type N/A:<br>" +
+        "<input type='text' name='other_experience' size='60' required></label></p>" +
+
+        "<h3 style='margin-top:1.5em;'>Yes / No Questions</h3>" +
+
+        "<p>Have you taken Psychology of Perception (PSYCH 406)?<br>" +
+        "<label><input type='radio' name='psych' value='Yes' required> Yes</label> " +
+        "<label><input type='radio' name='psych' value='No'> No</label> " +
+        "<label><input type='radio' name='psych' value='Currently enrolled'> Currently enrolled</label></p>" +
+
+        "<p>Have you participated in any similar studies about colors (e.g., color categorization or triplet/odd-one-out tasks)?<br>" +
+        "<label><input type='radio' name='other_studies' value='No' required> No</label> " +
+        "<label><input type='radio' name='other_studies' value='Yes'> Yes</label> " +
+        "<label><input type='radio' name='other_studies' value=\"I'm not sure\"> I'm not sure</label></p>"
     };
-    timeline.push(monitor_settings);
+    timeline.push(color_experience);
+
       
       
    var goodbye = {
@@ -1275,12 +1311,11 @@ var demographics = {
         + "We think that the amount that people differ has been consistently underestimated. One way that we are testing for this is "
         + "through similarity tasks like the one in this experiment. We expect that people will systematically differ in their "
         + "perceptions of how similar colors are to each other."
-        + "You may now exit this page. Thank you for participating!</p>"
-        + "<strong> Here is your secret code: CBWFX0NG </strong><br> Goodbye!<br><br>";
+        + "Please call the experimenter. Thank you for participating!</p>"
+       // + "<strong> Here is your secret code: CBWFX0NG </strong><br> Goodbye!<br><br>";
       return output;
       },
-      choices: ["<a href='https://app.prolific.com/submissions/complete?cc=CBWFX0NG'>Complete Experiment</a>"]    
-      //choices: "NO_KEYS"
+        choices: "NO_KEYS"
    };
   
 
@@ -1295,16 +1330,7 @@ var demographics = {
     fullscreen_mode: false
     })
 
-      
-//     // this is to save to normal server
-//    function saveData(name, data){
-//      var xhr = new XMLHttpRequest();
-//      xhr.open('POST', 'data_write.php'); // 'write_data.php' is the path to the php file described above.
-//      xhr.setRequestHeader('Content-Type', 'application/json');
-//      xhr.send(JSON.stringify({filename: name, filedata: data}));
-//    }
     
-
       
     jsPsych.run(timeline);
 

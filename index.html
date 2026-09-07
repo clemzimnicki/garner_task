@@ -324,49 +324,10 @@
     }
 
     var stimuli_arr = colorHex
-      //plan: 
-      //1) make a pool of random triplets
-      //2) sample
-    var validation = [
-      //this is a list of ones you want to keep in
-      // head is the one on top; choice 1 on Left choice 2 on Right
-                    {head: 'img_triplets/55824D.png',	choice_1: 'img_triplets/96C58C.png',	choice_2: 'img_triplets/3B8378.png'},
-                    {head: 'img_triplets/55824D.png',	choice_1: 'img_triplets/5E78A1.png',	choice_2: 'img_triplets/7EC6BA.png'},
-                    {head: 'img_triplets/55824D.png',	choice_1: 'img_triplets/96C58C.png',	choice_2: 'img_triplets/5E78A1.png'},
-                    {head: 'img_triplets/96C58C.png',	choice_1: 'img_triplets/7EC6BA.png',	choice_2: 'img_triplets/55824D.png'},
-                    {head: 'img_triplets/96C58C.png',	choice_1: 'img_triplets/55824D.png',	choice_2: 'img_triplets/A0BAE6.png'},
-                    {head: 'img_triplets/96C58C.png',	choice_1: 'img_triplets/A0BAE6.png',	choice_2: 'img_triplets/3B8378.png'},
-                    {head: 'img_triplets/5E78A1.png',	choice_1: 'img_triplets/A0BAE6.png',	choice_2: 'img_triplets/3B8378.png'},
-                    {head: 'img_triplets/5E78A1.png',	choice_1: 'img_triplets/55824D.png',	choice_2: 'img_triplets/7EC6BA.png'},
-                    {head: 'img_triplets/5E78A1.png',	choice_1: 'img_triplets/55824D.png',	choice_2: 'img_triplets/A0BAE6.png'},
-                    {head: 'img_triplets/A0BAE6.png',	choice_1: 'img_triplets/7EC6BA.png',	choice_2: 'img_triplets/5E78A1.png'},
-                    {head: 'img_triplets/A0BAE6.png',	choice_1: 'img_triplets/96C58C.png',	choice_2: 'img_triplets/3B8378.png'},
-                    {head: 'img_triplets/A0BAE6.png',	choice_1: 'img_triplets/5E78A1.png',	choice_2: 'img_triplets/96C58C.png'},
-                    {head: 'img_triplets/3B8378.png',	choice_1: 'img_triplets/7EC6BA.png',	choice_2: 'img_triplets/5E78A1.png'},
-                    {head: 'img_triplets/3B8378.png',	choice_1: 'img_triplets/55824D.png',	choice_2: 'img_triplets/7EC6BA.png'},
-                    {head: 'img_triplets/7EC6BA.png',	choice_1: 'img_triplets/A0BAE6.png',	choice_2: 'img_triplets/3B8378.png'},
-                    {head: 'img_triplets/7EC6BA.png',	choice_1: 'img_triplets/3B8378.png',	choice_2: 'img_triplets/96C58C.png'},
-                    {head: 'img_triplets/A06776.png',	choice_1: 'img_triplets/E6A8B7.png',	choice_2: 'img_triplets/A8664B.png'},
-                    {head: 'img_triplets/A06776.png',	choice_1: 'img_triplets/83764C.png',	choice_2: 'img_triplets/F1A78A.png'},
-                    {head: 'img_triplets/A06776.png',	choice_1: 'img_triplets/83764C.png',	choice_2: 'img_triplets/E6A8B7.png'},
-                    {head: 'img_triplets/E6A8B7.png',	choice_1: 'img_triplets/A06776.png',	choice_2: 'img_triplets/F1A78A.png'},
-                    {head: 'img_triplets/E6A8B7.png',	choice_1: 'img_triplets/A06776.png',	choice_2: 'img_triplets/C7B88B.png'},
-                    {head: 'img_triplets/E6A8B7.png',	choice_1: 'img_triplets/C7B88B.png',	choice_2: 'img_triplets/A8664B.png'},
-                    {head: 'img_triplets/83764C.png',	choice_1: 'img_triplets/C7B88B.png',	choice_2: 'img_triplets/A8664B.png'},
-                    {head: 'img_triplets/83764C.png',	choice_1: 'img_triplets/A06776.png',	choice_2: 'img_triplets/F1A78A.png'},
-                    {head: 'img_triplets/83764C.png',	choice_1: 'img_triplets/A06776.png',	choice_2: 'img_triplets/C7B88B.png'},
-                    {head: 'img_triplets/C7B88B.png',	choice_1: 'img_triplets/F1A78A.png',	choice_2: 'img_triplets/83764C.png'},
-                    {head: 'img_triplets/C7B88B.png',	choice_1: 'img_triplets/E6A8B7.png',	choice_2: 'img_triplets/A8664B.png'},
-                    {head: 'img_triplets/C7B88B.png',	choice_1: 'img_triplets/83764C.png',	choice_2: 'img_triplets/E6A8B7.png'},
-                    {head: 'img_triplets/F1A78A.png',	choice_1: 'img_triplets/C7B88B.png',	choice_2: 'img_triplets/A8664B.png'},
-                    {head: 'img_triplets/F1A78A.png',	choice_1: 'img_triplets/E6A8B7.png',	choice_2: 'img_triplets/A8664B.png'},
-                    {head: 'img_triplets/A8664B.png',	choice_1: 'img_triplets/A06776.png',	choice_2: 'img_triplets/F1A78A.png'},
-                    {head: 'img_triplets/A8664B.png',	choice_1: 'img_triplets/F1A78A.png',	choice_2: 'img_triplets/83764C.png'},
-                ]
-
+ 
     //concatenate the random (25) validation trials with the chosen (32) validation trials, for a total of 57
-    //the random ones are from validationRandom.json, and the hand picked ones are from validationPicked.json
-    validation_concat = validationTrials.concat(validation);
+    // this concatenates what is in validationRandom and validationPicked--some are random and some are hand-chosen.
+    validation_concat = validationPicked.concat(validationRandom);
 
     //list of 42 check trials that we made separately, in R. check_list is a var in JSON
     var check_shuffled = jsPsych.randomization.repeat(checkList, 1);

@@ -1,4 +1,4 @@
-validationTrials = [
+validationRandom= [
   {
     head: 'img_triplets/000000.png',
     choice_1: 'img_triplets/077ACC.png',

@@ -913,42 +913,11 @@
       
       var arr_pair = [];
 
-// define the trials!
-/*
-    var trial = {
-        type: jsPsychImageButtonResponse,
-        stimulus: jsPsych.timelineVariable('item'),    // IF YOU CHANGED THE OBJECT NAMES IN YOUR ARRAY ABOVE, CHANGE THEM HERE TO MATCH     
-        choices: function(){
-            shuffle(stimuli_arr);
-            arr_pair = getRandomItems(stimuli_arr);
-            // the following makes sure the choices and stimulus are NOT the same!
-            while(arr_pair[0] == jsPsych.timelineVariable('item') || arr_pair[1] == jsPsych.timelineVariable('item')){
-                arr_pair = getRandomItems(stimuli_arr);
-            }
-            return arr_pair;
-        },
-        button_html: '<button class="jspsych-btn-ckz"><img src= %choice%></button>',
-        on_finish: function(data){
-            
-            shuffle(stimuli_arr); // CHANGE THIS TO MATCH THE REGULAR ARRAY YOU SPECIFIED ABOVE
-            data.choices = arr_pair;
-            n = 1;
-            var data_last1 = jsPsych.data.get().last(n);
-            lasttrialdata_rt = data_last1.select('rt').mean();
-            if (lasttrialdata_rt < 500){
-                    data.speedy = true;
-                } else {
-                    data.speedy = false; 
-            }
-            data.sampleAlg = "random";
-        }
-    };
-*/
     // define the trials!
     var trial = {
-        type: jsPsychImageKeyboardResponse,
-        stimulus: jsPsych.timelineVariable('item'),
-        choices: ['arrowleft', 'arrowright'],
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: function () { return colorSquare(jsPsych.timelineVariable('item')); },
+        choices: ['ArrowLeft', 'ArrowRight'],
         on_start: function (trial) {
             shuffle(stimuli_arr);
             arr_pair = getRandomItems(stimuli_arr);
@@ -960,12 +929,7 @@
                 arr_pair = getRandomItems(stimuli_arr);
             }
             console.log("Choices:", arr_pair);
-            trial.prompt = `
-        <div style="display: flex; justify-content: space-around; margin-top: 20px;">
-          <img src="${arr_pair[0]}" style="width: 150px; height: 150px; margin-right: 50px;" />
-          <img src="${arr_pair[1]}" style="width: 150px; height: 150px; margin-left: 50px;" />
-        </div>
-      </div>`;
+            trial.prompt = colorPair(arr_pair[0], arr_pair[1]);
 
             // Store arr_pair in trial data
             trial.data = {
@@ -986,15 +950,17 @@
             // }
             //shuffle(texture_arr);
             //data.choices = arr_pair;
-            // Determine which image was selected based on key press
-            if (data.response == 'arrowleft') {
-                console.log("arrowleft selected.");
+            // Determine which image was selected based on key press.
+            // jsPsych stores keyboard responses in lowercase by default, so normalize before comparing.
+            var resp = (data.response || '').toLowerCase();
+            if (resp === 'arrowleft') {
+                console.log("ArrowLeft selected.");
                 data.selected_image = arr_pair[0];
-                data.selected_index = 0;  // arrowleft corresponds to the first choice
-            } else if (data.response == 'arrowright') {
-                console.log("arrowright selected.");
+                data.selected_index = 0;  // ArrowLeft corresponds to the first choice
+            } else if (resp === 'arrowright') {
+                console.log("ArrowRight selected.");
                 data.selected_image = arr_pair[1];
-                data.selected_index = 1;  // arrowleft corresponds to the first choice
+                data.selected_index = 1;  // ArrowRight corresponds to the second choice
             }
 
             // Get the previous trial's data and compute the average response time
@@ -1011,52 +977,22 @@
         },
     };
   
-/*
-    // define the validation trials!
-    var validation_trial = {
-        type: jsPsychImageButtonResponse,
-        stimulus: function(){
-            row = validation_concat.pop();
-            head = row.head;
-            return head;},         
-        choices: function(){
-            arr_pair = [row.choice_1, row.choice_2];
-            return arr_pair;
-        },
-        button_html: '<button class="jspsych-btn-ckz"><img src= %choice%></button>',
-        on_finish: function(data){
-            data.choices = arr_pair;
-            n = 1;
-            var data_last = jsPsych.data.get().last(n);
-            lasttrialdata_rt = data_last.select('rt').mean();
-            if (lasttrialdata_rt < 1000){
-                    data.speedy = true;
-                } else {
-                    data.speedy = false; 
-            }
-            data.sampleAlg = "validation"
-        }
-    };
-*/
+
   // define the validation trials!
   var validation_trial = {
-        type: jsPsychImageKeyboardResponse,
+        type: jsPsychHtmlKeyboardResponse,
         stimulus: function () {
             row = validation_concat.pop();
             head = row.head;
-            return head;
+            return colorSquare(head);
         },
-        choices: ['arrowleft', 'arrowright'],  // Use arrow keys for choices
+        choices: ['ArrowLeft', 'ArrowRight'],  // Use arrow keys for choices
 
         on_start: function (trial) {
             arr_pair = [row.choice_1, row.choice_2];  // Get the two choices
 
             // Set the prompt to display the two choice images with space between them
-            trial.prompt = `
-      <div style="display: flex; justify-content: space-around; margin-top: 20px;">
-        <img src="${arr_pair[0]}" style="width: 150px; height: 150px; margin-right: 50px;" />
-        <img src="${arr_pair[1]}" style="width: 150px; height: 150px; margin-left: 50px;" />
-      </div>`;
+            trial.prompt = colorPair(arr_pair[0], arr_pair[1]);
         },
 
         on_finish: function (data) {
@@ -1067,15 +1003,17 @@
                 console.error("arr_pair is undefined. Data may not be set correctly.");
                 return;
             }
-            // Determine which image was selected based on the key press
-            if (data.response == 'arrowleft') {
-                console.log("arrowleft selected.");
+            // Determine which image was selected based on the key press.
+            // jsPsych stores keyboard responses in lowercase by default, so normalize before comparing.
+            var resp = (data.response || '').toLowerCase();
+            if (resp === 'arrowleft') {
+                console.log("ArrowLeft selected.");
                 data.selected_image = arr_pair[0];
-                data.selected_index = 0;  // arrowleft corresponds to the first choice
-            } else if (data.response == 'arrowright') {
-                console.log("arrowright selected.");
+                data.selected_index = 0;  // ArrowLeft corresponds to the first choice
+            } else if (resp === 'arrowright') {
+                console.log("ArrowRight selected.");
                 data.selected_image = arr_pair[1];
-                data.selected_index = 1;  // arrowleft corresponds to the first choice
+                data.selected_index = 1;  // ArrowRight corresponds to the second choice
             }
 
             // Save the choices to the data
@@ -1095,9 +1033,9 @@
 
     // Define the attention checks with keyboard responses
     var check_trial = {
-        type: jsPsychImageKeyboardResponse,
-        stimulus: jsPsych.timelineVariable('head'),  // Display the head image
-        choices: ['arrowleft', 'arrowright'],  // Use arrow keys for choices
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: function () { return colorSquare(jsPsych.timelineVariable('head')); },  // Display the head color
+        choices: ['ArrowLeft', 'ArrowRight'],  // Use arrow keys for choices
 
         on_start: function (trial) {
             arr_pair = [
@@ -1106,11 +1044,7 @@
             ];
 
             // Set the prompt to display the two choice images with space between them
-            trial.prompt = `
-      <div style="display: flex; justify-content: space-around; margin-top: 20px;">
-        <img src="${arr_pair[0]}" style="width: 150px; height: 150px; margin-right: 50px;" />
-        <img src="${arr_pair[1]}" style="width: 150px; height: 150px; margin-left: 50px;" />
-      </div>`;
+            trial.prompt = colorPair(arr_pair[0], arr_pair[1]);
         },
 
         on_finish: function (data) {
@@ -1127,13 +1061,13 @@
 
             // Determine which image was selected based on the key press
             if (response === 'arrowleft') {
-                console.log("arrowleft selected.");
+                console.log("ArrowLeft selected.");
                 data.selected_image = arr_pair[0];
-                data.selected_index = 0;  // arrowleft corresponds to the first choice
+                data.selected_index = 0;  // ArrowLeft corresponds to the first choice
             } else if (response === 'arrowright') {
-                console.log("arrowright selected.");
+                console.log("ArrowRight selected.");
                 data.selected_image = arr_pair[1];
-                data.selected_index = 1;  // arrowright corresponds to the second choice
+                data.selected_index = 1;  // ArrowRight corresponds to the second choice
             }
 
             // Log the values for debugging
@@ -1182,6 +1116,7 @@
                 "<p>Press 'y' to continue.</p></p>",
         choices: ["y"]
     }
+
 
     var if_node_speed = {
         timeline: [if_trial_speed],

@@ -465,11 +465,15 @@
               dark      512D5F          184415
               light     D5A9E4          96C58C
 
-       Counterbalancing (randomly assigned per participant):
-         Condition A:  Task 1 = HUE task (blue vs brown),
-                       Task 2 = LIGHTNESS task (dark vs light, purple/green colors)
-         Condition B:  Task 1 = LIGHTNESS task (dark vs light, blue/brown colors),
-                       Task 2 = HUE task (purple vs green)
+        Counterbalancing — two factors, independently randomized per participant:
+            garner_condition  : which DIMENSION is done first
+                                A = HUE task first,       then LIGHTNESS task
+                                B = LIGHTNESS task first,  then HUE task
+            garner_pair_first : which COLOR PAIR the FIRST task uses
+                                BB = blue/brown first  (purple/green second)
+                                PG = purple/green first (blue/brown second)
+            The second task always uses the other pair and the other dimension,
+            so each participant does HUE on one pair and LIGHTNESS on the other.
 
        HUE task block structure (5 blocks):
          Blocks 1-2  control      (lightness fixed, hue varies)
@@ -512,14 +516,25 @@
     var GARNER_TRIALS_PER_BLOCK = 48;
 
     // --- Randomly assign participant to counterbalancing condition ---
-    // Condition A: HUE(blue/brown) then LIGHTNESS(purple/green)
-    // Condition B: LIGHTNESS(blue/brown) then HUE(purple/green)
+    // garner_condition sets which DIMENSION is done first:
+    //   A = HUE first, then LIGHTNESS   B = LIGHTNESS first, then HUE
     var garner_condition = Math.random() < 0.5 ? 'A' : 'B';
     jsPsych.data.addProperties({ garner_condition: garner_condition });
 
-    // Determine which color pair goes with each task for this participant
-    var hue_task_pair   = (garner_condition === 'A') ? 'BB' : 'PG'; // BB=blue/brown, PG=purple/green
-    var light_task_pair = (garner_condition === 'A') ? 'PG' : 'BB';
+
+    // garner_pair_first sets which COLOR PAIR the FIRST task uses (independent
+    // of dimension). BB=blue/brown, PG=purple/green. The second task uses the
+    // other pair, so hue and lightness are always run on different pairs.
+    var garner_pair_first = Math.random() < 0.5 ? 'BB' : 'PG';
+    jsPsych.data.addProperties({ garner_pair_first: garner_pair_first });
+ 
+
+     // Determine which color pair goes with each task for this participant.
+    // The first task uses garner_pair_first; garner_condition says whether that
+    // first task is the hue task or the lightness task.
+    var garner_pair_second = (garner_pair_first === 'BB') ? 'PG' : 'BB';
+    var hue_task_pair   = (garner_condition === 'A') ? garner_pair_first  : garner_pair_second;
+    var light_task_pair = (garner_condition === 'A') ? garner_pair_second : garner_pair_first;
 
     // --- Randomize category->side mapping per participant, per task ---
     // HUE task: for BB pair, blue vs brown; for PG pair, purple vs green
